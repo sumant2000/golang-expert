@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package task;
+
+option go_package = "github.com/sumantkhapre/taskmaster/proto";
+
+// Task service definition
+service TaskService {
+  // Submit a task for execution
+  rpc SubmitTask (TaskRequest) returns (TaskResponse) {}
+  // Get task status
+  rpc GetTaskStatus (TaskStatusRequest) returns (TaskStatusResponse) {}
+  // Stream task updates
+  rpc StreamTaskUpdates (TaskStatusRequest) returns (stream TaskUpdate) {}
+}
+
+// Task request message
+message TaskRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string command = 4;
+  int32 priority = 5;
+}
+
+// Task response message
+message TaskResponse {
+  string task_id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// Task status request message
+message TaskStatusRequest {
+  string task_id = 1;
+}
+
+// Task status response message
+message TaskStatusResponse {
+  string task_id = 1;
+  string status = 2;
+  string output = 3;
+  string error = 4;
+}
+
+// Task update message for streaming
+message TaskUpdate {
+  string task_id = 1;
+  string status = 2;
+  string output = 3;
+  string error = 4;
+  int64 timestamp = 5;
+} 
